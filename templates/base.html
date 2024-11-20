@@ -1,23 +1,25 @@
 {% load static %}
 <html lang="en" data-bs-theme="auto">
 <head>
-    <script src="{% static 'js/color-modes.js' %}"></script>
+    <script src="{% static 'js/libs/color-modes.js' %}"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        ExpensesDashboard {% block title %}{% endblock %}
+        {% block title %}{% endblock %}
     </title>
 
-    <link href="{% static 'css/docsearch.css@3.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+
+    <link href="{% static 'css/libs/docsearch.css@3.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/libs/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
 
     <!   <!-- Custom styles for this template -->
-    <link href="{% static 'css/bootstrap-icons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/libs/bootstrap-icons.min.css' %}" rel="stylesheet">
     <!   <!-- Custom styles for this template -->
-    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'css/libs/dashboard.css' %}" rel="stylesheet">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -143,7 +145,7 @@
 </svg>
 
 <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">TrulyExpenses</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="{% url 'expenses' %}">TrulyExpenses</a>
 
     <ul class="navbar-nav flex-row d-md-none">
         <li class="nav-item text-nowrap">
@@ -166,9 +168,10 @@
         </li>
     </ul>
 
-    <div id="navbarSearch" class="navbar-search w-100 collapse">
-        <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
-    </div>
+{#    <div id="navbarSearch" class="navbar-search w-100">#}
+{#        #}
+{#        <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search" id="searchInput">#}
+{#    </div>#}
 </header>
 
 <div class="container-fluid">
@@ -176,14 +179,17 @@
         {% include 'components/sidebar.html' %}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             {% block content %}
+
             {% endblock %}
         </main>
     </div>
 </div>
 
 
-<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'js/chart.umd.js' %}"></script>
-<script src="{% static 'js/dashboard.js' %}"></script>
+
+<script src="{% static 'js/libs/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/libs/chart.umd.js' %}"></script>
+<script src="{% static 'js/libs/dashboard.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
