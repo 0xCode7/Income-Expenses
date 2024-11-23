@@ -1,0 +1,62 @@
+* {
+    font-weight: 600;
+}
+
+
+#header {
+    background: rgb(0, 62, 69);
+    color: #ffffff;
+
+
+    #branding {
+        #head {
+            font-weight: bold;
+            font-size: 24px;
+            padding:3px 0 ;
+            margin: 0;
+        }
+    }
+
+}
+
+div.breadcrumbs {
+    background: rgb(61, 88, 105);
+    color: #ffffff;
+}
+
+.dashboard {
+    .module h2, .module caption, .inline-group h2 {
+        background: rgb(0, 62, 69);
+
+        color: #ffffff;
+    }
+
+    .main {
+        .content {
+            .colMS {
+                width: 75% !important;
+            }
+        }
+    }
+}
+
+
+.login {
+    background-image: url("../img/background.jpg") !important;
+    background-size: cover !important;
+    background-position: center !important;
+
+
+    .main {
+
+        .content {
+            background: #5c3e2b;
+
+        }
+    }
+
+    .submit-row input {
+        width: 100%;
+        background: rgb(61, 88, 105);
+    }
+}

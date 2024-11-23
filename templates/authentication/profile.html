@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>Profile Page</h3>
+    <p>Welcome, <span class="text-success">{{ user.username }}</span></p>
+    {% include 'components/messages.html' %}
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+        </div>
+
+        <div class="form-group">
+            <label for="passwordField">Password</label>
+            <input type="password" class="form-control" id="passwordField" name="password" autocomplete="new-password">
+
+            <small class="float-end py-3 showPassword" style="cursor: pointer">SHOW</small>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary mt-3">Update</button>
+    </form>
+{% endblock %}

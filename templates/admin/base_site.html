@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    Admin@TrulyExpenses
+{% endblock %}
+
+{% block extrahead %}
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+{% endblock %}
+{% block branding %}
+    <h1 id="head">
+        <img src="{% static 'img/favicon.png' %}" width="35px" height="35px">
+
+        TrulyExpenses
+    </h1>
+{% endblock %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
