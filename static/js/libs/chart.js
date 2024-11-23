@@ -1,13 +1,7 @@
-/**
- * Skipped minification because the original files appears to be already minified.
- * Original file: /npm/chart.js@4.4.6/dist/chart.umd.js
- *
- * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
- */
 /*!
- * Chart.js v4.4.6
+ * Chart.js v4.4.1
  * https://www.chartjs.org
- * (c) 2024 Chart.js Contributors
+ * (c) 2023 Chart.js Contributors
  * Released under the MIT License
  */
 !function (t, e) {
@@ -1163,7 +1157,7 @@
             r = pe(n.maxHeight, t, "clientHeight") || T, l = function (t, e, i) {
                 let s, n;
                 if (void 0 === e || void 0 === i) {
-                    const o = t && ge(t);
+                    const o = ge(t);
                     if (o) {
                         const t = o.getBoundingClientRect(), a = me(o), r = _e(a, "border", "width"), l = _e(a, "padding");
                         e = t.width - l.width - r.width, i = t.height - l.height - r.height, s = pe(a.maxWidth, o, "clientWidth"), n = pe(a.maxHeight, o, "clientHeight")
@@ -1242,7 +1236,7 @@
     }
 
     function Te(t, e) {
-        (e || t) && ((e = e || t.getContext("2d")).save(), e.resetTransform(), e.clearRect(0, 0, t.width, t.height), e.restore())
+        (e = e || t.getContext("2d")).save(), e.resetTransform(), e.clearRect(0, 0, t.width, t.height), e.restore()
     }
 
     function Le(t, e, i, s) {
@@ -1444,7 +1438,7 @@
         Xe = (t, e) => o(e) && "adapters" !== t && (null === Object.getPrototypeOf(e) || e.constructor === Object);
 
     function qe(t, e, i) {
-        if (Object.prototype.hasOwnProperty.call(t, e) || "constructor" === e) return t[e];
+        if (Object.prototype.hasOwnProperty.call(t, e)) return t[e];
         const s = i();
         return t[e] = s, s
     }
@@ -2058,7 +2052,7 @@
         const o = [], a = "x" === i ? "inXRange" : "inYRange";
         let r = !1;
         return Hi(t, i, e, ((t, s, l) => {
-            t[a] && t[a](e[i], n) && (o.push({element: t, datasetIndex: s, index: l}), r = r || t.inRange(e.x, e.y, n))
+            t[a](e[i], n) && (o.push({element: t, datasetIndex: s, index: l}), r = r || t.inRange(e.x, e.y, n))
         })), s && !r ? [] : o
     }
 
@@ -2334,7 +2328,7 @@
     const us = !!Se && {passive: !0};
 
     function fs(t, e, i) {
-        t && t.canvas && t.canvas.removeEventListener(e, i, us)
+        t.canvas.removeEventListener(e, i, us)
     }
 
     function gs(t, e) {
@@ -2398,7 +2392,7 @@
             }(e, t))
         }), t);
         return function (t, e, i) {
-            t && t.addEventListener(e, i, us)
+            t.addEventListener(e, i, us)
         }(s, e, n), n
     }
 
@@ -2459,7 +2453,7 @@
         }
 
         isAttached(t) {
-            const e = t && ge(t);
+            const e = ge(t);
             return !(!e || !e.isConnected)
         }
     }
@@ -2616,16 +2610,16 @@
     function Ls(t, e, i, s = {}) {
         const n = t.keys, o = "single" === s.mode;
         let r, l, h, c;
-        if (null === e) return;
-        let d = !1;
-        for (r = 0, l = n.length; r < l; ++r) {
-            if (h = +n[r], h === i) {
-                if (d = !0, s.all) continue;
-                break
+        if (null !== e) {
+            for (r = 0, l = n.length; r < l; ++r) {
+                if (h = +n[r], h === i) {
+                    if (s.all) continue;
+                    break
+                }
+                c = t.values[h], a(c) && (o || 0 === e || F(e) === F(c)) && (e += c)
             }
-            c = t.values[h], a(c) && (o || 0 === e || F(e) === F(c)) && (e += c)
+            return e
         }
-        return d || s.all ? e : 0
     }
 
     function Es(t, e) {
@@ -2732,16 +2726,12 @@
 
         _dataCheck() {
             const t = this.getDataset(), e = t.data || (t.data = []), i = this._data;
-            if (o(e)) {
-                const t = this._cachedMeta;
-                this._data = function (t, e) {
-                    const {iScale: i, vScale: s} = e, n = "x" === i.axis ? "x" : "y", o = "x" === s.axis ? "x" : "y",
-                        a = Object.keys(t), r = new Array(a.length);
-                    let l, h, c;
-                    for (l = 0, h = a.length; l < h; ++l) c = a[l], r[l] = {[n]: c, [o]: t[c]};
-                    return r
-                }(e, t)
-            } else if (i !== e) {
+            if (o(e)) this._data = function (t) {
+                const e = Object.keys(t), i = new Array(e.length);
+                let s, n, o;
+                for (s = 0, n = e.length; s < n; ++s) o = e[s], i[s] = {x: o, y: t[o]};
+                return i
+            }(e); else if (i !== e) {
                 if (i) {
                     rt(i, this);
                     const t = this._cachedMeta;
@@ -2761,7 +2751,7 @@
             let s = !1;
             this._dataCheck();
             const n = e._stacked;
-            e._stacked = Es(e.vScale, e), e.stack !== i.stack && (s = !0, Vs(e), e.stack = i.stack), this._resyncElements(t), (s || n !== e._stacked) && (zs(this, e._parsed), e._stacked = Es(e.vScale, e))
+            e._stacked = Es(e.vScale, e), e.stack !== i.stack && (s = !0, Vs(e), e.stack = i.stack), this._resyncElements(t), (s || n !== e._stacked) && zs(this, e._parsed)
         }
 
         configure() {
@@ -4226,7 +4216,7 @@
         static instances = Pn;
         static overrides = re;
         static registry = en;
-        static version = "4.4.6";
+        static version = "4.4.1";
         static getChart = Dn;
 
         static register(...t) {
@@ -4455,7 +4445,7 @@
             let t;
             if (this._resizeBeforeDraw) {
                 const {width: t, height: e} = this._resizeBeforeDraw;
-                this._resizeBeforeDraw = null, this._resize(t, e)
+                this._resize(t, e), this._resizeBeforeDraw = null
             }
             if (this.clear(), this.width <= 0 || this.height <= 0) return;
             if (!1 === this.notifyPlugins("beforeDraw", {cancelable: !0})) return;
@@ -5235,12 +5225,11 @@
             _getStacks(t, e) {
                 const {iScale: i} = this._cachedMeta,
                     n = i.getMatchingVisibleMetas(this._type).filter((t => t.controller.options.grouped)),
-                    o = i.options.stacked, a = [], r = this._cachedMeta.controller.getParsed(e), l = r && r[i.axis],
-                    h = t => {
-                        const e = t._parsed.find((t => t[i.axis] === l)), n = e && e[t.vScale.axis];
+                    o = i.options.stacked, a = [], r = t => {
+                        const i = t.controller.getParsed(e), n = i && i[t.vScale.axis];
                         if (s(n) || isNaN(n)) return !0
                     };
-                for (const i of n) if ((void 0 === e || !h(i)) && ((!1 === o || -1 === a.indexOf(i.stack) || void 0 === o && void 0 === i.stack) && a.push(i.stack), i.index === t)) break;
+                for (const i of n) if ((void 0 === e || !r(i)) && ((!1 === o || -1 === a.indexOf(i.stack) || void 0 === o && void 0 === i.stack) && a.push(i.stack), i.index === t)) break;
                 return a.length || a.push(void 0), a
             }
 
@@ -5321,7 +5310,7 @@
             draw() {
                 const t = this._cachedMeta, e = t.vScale, i = t.data, s = i.length;
                 let n = 0;
-                for (; n < s; ++n) null === this.getParsed(n)[e.axis] || i[n].hidden || i[n].draw(this._ctx)
+                for (; n < s; ++n) null !== this.getParsed(n)[e.axis] && i[n].draw(this._ctx)
             }
         }, BubbleController: class extends Ns {
             static id = "bubble";
@@ -5900,9 +5889,9 @@
                         outerRadius: c,
                         circumference: d
                     } = this.getProps(["startAngle", "endAngle", "innerRadius", "outerRadius", "circumference"], i),
-                    u = (this.options.spacing + this.options.borderWidth) / 2, f = l(d, r - a),
-                    g = Z(n, a, r) && a !== r, p = f >= O || g, m = tt(o, h + u, c + u);
-                return p && m
+                    u = (this.options.spacing + this.options.borderWidth) / 2, f = l(d, r - a) >= O || Z(n, a, r),
+                    g = tt(o, h + u, c + u);
+                return f && g
             }
 
             getCenterPoint(t) {
@@ -6497,18 +6486,18 @@
                     })
                 }
             }(this, o), s.display && this.ticks.forEach(((t, e) => {
-                if (0 !== e || 0 === e && this.min < 0) {
+                if (0 !== e) {
                     r = this.getDistanceFromCenterForValue(t.value);
                     const i = this.getContext(e), a = s.setContext(i), l = n.setContext(i);
                     !function (t, e, i, s, n) {
                         const o = t.ctx, a = e.circular, {color: r, lineWidth: l} = e;
-                        !a && !s || !r || !l || i < 0 || (o.save(), o.strokeStyle = r, o.lineWidth = l, o.setLineDash(n.dash || []), o.lineDashOffset = n.dashOffset, o.beginPath(), Lo(t, i, a, s), o.closePath(), o.stroke(), o.restore())
+                        !a && !s || !r || !l || i < 0 || (o.save(), o.strokeStyle = r, o.lineWidth = l, o.setLineDash(n.dash), o.lineDashOffset = n.dashOffset, o.beginPath(), Lo(t, i, a, s), o.closePath(), o.stroke(), o.restore())
                     }(this, a, r, o, l)
                 }
             })), i.display) {
                 for (t.save(), a = o - 1; a >= 0; a--) {
                     const s = i.setContext(this.getPointLabelContext(a)), {color: n, lineWidth: o} = s;
-                    o && n && (t.lineWidth = o, t.strokeStyle = n, t.setLineDash(s.borderDash), t.lineDashOffset = s.borderDashOffset, r = this.getDistanceFromCenterForValue(e.reverse ? this.min : this.max), l = this.getPointPosition(a, r), t.beginPath(), t.moveTo(this.xCenter, this.yCenter), t.lineTo(l.x, l.y), t.stroke())
+                    o && n && (t.lineWidth = o, t.strokeStyle = n, t.setLineDash(s.borderDash), t.lineDashOffset = s.borderDashOffset, r = this.getDistanceFromCenterForValue(e.ticks.reverse ? this.min : this.max), l = this.getPointPosition(a, r), t.beginPath(), t.moveTo(this.xCenter, this.yCenter), t.lineTo(l.x, l.y), t.stroke())
                 }
                 t.restore()
             }
@@ -6523,7 +6512,7 @@
             const s = this.getIndexAngle(0);
             let n, o;
             t.save(), t.translate(this.xCenter, this.yCenter), t.rotate(s), t.textAlign = "center", t.textBaseline = "middle", this.ticks.forEach(((s, a) => {
-                if (0 === a && this.min >= 0 && !e.reverse) return;
+                if (0 === a && !e.reverse) return;
                 const r = i.setContext(this.getContext(a)), l = Si(r.font);
                 if (n = this.getDistanceFromCenterForValue(this.ticks[a].value), r.showLabelBackdrop) {
                     t.font = l.string, o = t.measureText(s.label).width, t.fillStyle = r.backdropColor;
@@ -6922,12 +6911,11 @@
     var Go = {
         id: "colors", defaults: {enabled: !0, forceOverride: !1}, beforeLayout(t, e, i) {
             if (!i.enabled) return;
-            const {data: {datasets: s}, options: n} = t.config, {elements: o} = n,
-                a = Ko(s) || (r = n) && (r.borderColor || r.backgroundColor) || o && Ko(o) || "rgba(0,0,0,0.1)" !== ue.borderColor || "rgba(0,0,0,0.1)" !== ue.backgroundColor;
-            var r;
-            if (!i.forceOverride && a) return;
-            const l = qo(t);
-            s.forEach(l)
+            const {data: {datasets: s}, options: n} = t.config, {elements: o} = n;
+            if (!i.forceOverride && (Ko(s) || (a = n) && (a.borderColor || a.backgroundColor) || o && Ko(o))) return;
+            var a;
+            const r = qo(t);
+            s.forEach(r)
         }
     };
 
@@ -7701,16 +7689,15 @@
     const Sa = {
         average(t) {
             if (!t.length) return !1;
-            let e, i, s = new Set, n = 0, o = 0;
+            let e, i, s = 0, n = 0, o = 0;
             for (e = 0, i = t.length; e < i; ++e) {
                 const i = t[e].element;
                 if (i && i.hasValue()) {
                     const t = i.tooltipPosition();
-                    s.add(t.x), n += t.y, ++o
+                    s += t.x, n += t.y, ++o
                 }
             }
-            if (0 === o || 0 === s.size) return !1;
-            return {x: [...s].reduce(((t, e) => t + e)) / s.size, y: n / o}
+            return {x: s / o, y: n / o}
         }, nearest(t, e) {
             if (!t.length) return !1;
             let i, s, n, o = e.x, a = e.y, r = Number.POSITIVE_INFINITY;
