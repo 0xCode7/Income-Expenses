@@ -1,14 +1,14 @@
-from datetime import datetime
+from datetime import date, timedelta
 from django.utils.timezone import now
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.http import JsonResponse
-
+from django.http import JsonResponse, HttpResponse
 from userpreferences.models import UserPreferences
 from .models import *
 import json
+import csv
 
 
 # Create your views here.
@@ -25,7 +25,7 @@ def handle_expanse_form(request, expense=None, template_name='expenses/add-expen
 
         if not amount:
             messages.error(request, 'Amount is required')
-            context = {"values": ىيثءrequest.POST, "categories": categories}
+            context = {"values": request.POST, "categories": categories}
             return render(request, 'expenses/add-expense.html', context)
         if not description:
             messages.error(request, 'Description is required')
@@ -96,7 +96,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
 
-    context = {"categories": categories, "expenses": expenses, "page_obj": page_obj}
+    context = {"categories": categories, "expenses": expenses, "page_obj": page_obj, "currency": currency}
     return render(request, 'expenses/index.html', context)
 
 
@@ -118,3 +118,44 @@ def delete_expense(request, id):
         expense.delete()
         messages.success(request, 'Expense deleted successfully')
     return redirect('expenses')
+
+
+@login_required(login_url='/auth/login')
+def expense_summary(request):
+    today_date = date.today()
+    six_months_ago = today_date - timedelta(days=30 * 6)
+    expenses = Expense.objects.filter(owner=request.user, date__gte=six_months_ago, date__lte=today_date)
+    final = {}
+
+    def get_category(expense):
+        return expense.category
+
+    def get_expense_category_amount(category):
+        items = Expense.objects.filter(category=category)
+        amount = sum(item.amount for item in items)
+        return amount
+
+    category_list = list(set(map(get_category, expenses)))
+    for expense in expenses:
+        for category in category_list:
+            final[str(category)] = get_expense_category_amount(category)
+
+    return JsonResponse({'category_data': final}, safe=False)
+
+
+def stats(request):
+    return render(request, 'expenses/stats.html')
+
+
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Expenses' + str(now()) + '.csv'
+    expenses = Expense.objects.filter(owner=request.user)
+    currency = UserPreferences.objects.get(user=request.user).currency
+    print(currency)
+    writer = csv.writer(response)
+    writer.writerow(['Amount  (' + str(currency[:3]) + ')', 'Category', 'Description', 'Date'])
+    for expense in expenses:
+        writer.writerow([expense.amount, expense.category, expense.description, expense.date])
+    return response
+
